@@ -16,9 +16,6 @@ export default class AuthController extends BaseController implements BaseContro
 
   useMiddleWare() {
     this.app.use('/api/v1/me', (req: any, res, next) => {
-      console.log(req.session);
-      console.log(req.cookies);
-      console.log('middleware');
       next();
     })
   }
@@ -29,10 +26,13 @@ export default class AuthController extends BaseController implements BaseContro
         req.session.email = req.body.email;
       }
       res.cookie('name', 'express', {maxAge: 36000}).send('cookie set');
-      // res.send('Hello')
     });
-    this.app.get('/api/v1/me', (req, res) => {
-      res.send({username: 'YOUR USERNAME', password: 'YOUR PASSWORD'})
+    this.app.get('/api/v1/me', (req: any, res) => {
+      if (!req.cookies.name) {
+        res.status(401).send({message: 'Unauthorized!'});
+        return;
+      }
+      res.send({username: 'YOUR USERNAME', password: 'YOUR PASSWORD'});
     });
 
     this.app.post(Paths.Auth.register, (req, res) => {
