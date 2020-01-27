@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "outDir" : "dist",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "target": "ES6",
+    "sourceMap": true
+  },
+  "include": [
+    "**/*.ts"
+  ]
+}
