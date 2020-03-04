@@ -3,26 +3,18 @@ import BaseController from '../base';
 import BaseControllerInterface from "../base/interface.base";
 import CourseService from "../../services/course/course.service";
 import {injectService} from "../../decorators/injectService";
+import {GET} from '../../decorators/get';
+import {POST} from '../../decorators/post';
+
+console.log(GET);
 
 export function Controller() {
     return function (constructorClass: Function) {
         console.log(constructorClass);
+        return constructorClass;
     }
 }
 
-function GET(path: string) {
-    return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
-        console.log('--------------------------------');
-        console.log(target);
-        console.log(propertyKey);
-        console.log(descriptor);
-        console.log(target.app);
-        console.log(descriptor.value);
-        console.log('--------------------------------');
-    }
-}
-
-@Controller()
 export default class CourseController extends BaseController implements BaseControllerInterface {
     @injectService(CourseService) private courseService: CourseService;
     constructor(app: Express) {
@@ -31,14 +23,17 @@ export default class CourseController extends BaseController implements BaseCont
 
     @GET('/api/v1/courses')
     async getCourses(req, res) {
-        console.log(req);
-        console.log(res);
+        console.log(this);
+        // const courses = await this.courseService.getCourses();
+        res.send({list: [], totalCount: 0});
+    };
+
+    @POST('/api/v1/courses')
+    async createCourse(req, res) {
+        console.log(req.body);
+        res.status(201).send({message: 'Created!'})
     }
 
     register() {
-        this.app.get('/api/v1/courses', async (req, res) => {
-            const courses = await this.courseService.getCourses();
-            res.send({list: courses, totalCount: 0});
-        });
     }
 }

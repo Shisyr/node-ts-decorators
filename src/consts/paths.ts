@@ -4,6 +4,8 @@ export const baseApi = (route: string) => {
 
 export default class Paths {
     static Auth = class {
-        static register = baseApi('/register')
+        static register = baseApi('/register');
+        static login = baseApi('/login');
+        static me = baseApi('/me')
     }
 }

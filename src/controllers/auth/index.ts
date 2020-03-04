@@ -14,6 +14,10 @@ export default class AuthController extends BaseController implements BaseContro
     super(app);
   }
 
+  async login(req, res) {
+    console.log(req);
+  };
+
   useMiddleWare() {
     this.app.use('/api/v1/me', (req: any, res, next) => {
       next();
@@ -21,17 +25,27 @@ export default class AuthController extends BaseController implements BaseContro
   }
 
   register() {
-    this.app.post('/api/v1/login', (req: any, res) => {
-      if (req.body.email) {
-        req.session.email = req.body.email;
+
+    this.app.post(Paths.Auth.login, (req: any, res) => {
+      const {email, password} = req.body;
+      if (email) {
+        req.session.email = email;
       }
-      res.cookie('name', 'express', {maxAge: 36000}).send('cookie set');
+      res.status(200).send({message: 'Success!'});
     });
-    this.app.get('/api/v1/me', (req: any, res) => {
-      if (!req.cookies.name) {
-        res.status(401).send({message: 'Unauthorized!'});
-        return;
+
+    this.app.get(Paths.Auth.me, (req: any, res) => {
+      if (!req.session.email) {
+        return res.status(401).send({message: 'Unauthorized!'});
       }
+      const currentDate = new Date(Date.now());
+      console.log(currentDate);
+      console.log(req.session.cookie.expires);
+      // req.session.regenerate((err) => {
+      //   if (err) {
+      //    return res.status(401).send({message: 'Unauthorized!'});
+      //   }
+      // });
       res.send({username: 'YOUR USERNAME', password: 'YOUR PASSWORD'});
     });
 

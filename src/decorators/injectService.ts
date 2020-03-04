@@ -8,6 +8,7 @@ interface Services {
 export let services: Services[] = [];
 
 export function injectService(object: any) {
+    console.log('inject service');
     return function (target: any, propertyKey: string) {
         let foundedService = services.find(service => service.key === object.name);
         if (!foundedService) {
